@@ -52,16 +52,22 @@ $.get('http://localhost:8000/golf1', function(data) {
     sections.push(section);
 
     // Glue. Model -> DOM
+    var slides = $('.slides').detach();
+    var articleTemplate = $('.article.template').detach();
+    var sectionTemplate = $('.section.template').detach();
+
     sections.forEach(function(section) {
-        var sectionView = $('.section').clonifyTemplate('.slides');
+        var sectionView = sectionTemplate.clonifyTemplate(slides);
         sectionView.find('.sectionName').text(section.name);
 
         section.articles.forEach(function(article) {
-            var articleView = $('.article.template').clonifyTemplate(sectionView);
+            var articleView = articleTemplate.clonifyTemplate(sectionView);
             articleView.find('.title').text(article.title);
             articleView.find('.image').attr({src: article.image});
         });
     });
+
+    slides.appendTo('.reveal');
 });
 
 
