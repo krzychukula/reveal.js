@@ -7,7 +7,6 @@ jQuery.fn.clonifyTemplate = function(selector) {
         .appendTo(selector);
 };
 
-
 // model
 var sections = [
     {
@@ -35,16 +34,37 @@ var sections = [
     }
 ];
 
+$.get('http://localhost:8000/golf1', function(data) {
+    // map xml from data feed to local json model (can skip this step later and read straight from the feed)
+    var xml = $(data);
+    var entries = xml.find('entry');
 
-// Glue. Model -> DOM
-sections.forEach(function(section) {
-    var sectionView = $('.section').clonifyTemplate('.slides');
-    sectionView.find('.sectionName').text(section.name);
+    var section = {};
+    section.name = 'Golf';
+    section.articles = [];
+    entries.each(function(index, entry) {
+        var article = {};
+        console.log(entry);
+        article.title = $(entry).find('title').text();
+        article.image = $(entry).find('link[rel="teaserreal"]').text();
+        section.articles.push(article);
+    });
+    sections.push(section);
 
-    section.articles.forEach(function(article) {
-        var articleView = $('.article.template').clonifyTemplate(sectionView);
-        articleView.find('.title').text(article.title);
-        articleView.find('.image').attr({src: article.image});
+    // Glue. Model -> DOM
+    sections.forEach(function(section) {
+        var sectionView = $('.section').clonifyTemplate('.slides');
+        sectionView.find('.sectionName').text(section.name);
+
+        section.articles.forEach(function(article) {
+            var articleView = $('.article.template').clonifyTemplate(sectionView);
+            articleView.find('.title').text(article.title);
+            articleView.find('.image').attr({src: article.image});
+        });
     });
 });
+
+
+
+
 
