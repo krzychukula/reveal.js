@@ -34,7 +34,7 @@ var sections = [
     }
 ];
 
-$.get('http://localhost:8000/golf1', function(data) {
+$.get('http://localhost:8000/golf2', function(data) {
     // map xml from data feed to local json model (can skip this step later and read straight from the feed)
     var xml = $(data);
     var entries = xml.find('entry');
@@ -46,7 +46,7 @@ $.get('http://localhost:8000/golf1', function(data) {
         var article = {};
         console.log(entry);
         article.title = $(entry).find('title').text();
-        article.image = $(entry).find('link[rel="teaserreal"]').text();
+        article.image = $(entry).find('link[rel="teaserreal"]').attr("href").replace("{cropversion}", "w180c43");
         section.articles.push(article);
     });
     sections.push(section);
