@@ -9,29 +9,29 @@ jQuery.fn.clonifyTemplate = function(selector) {
 
 // model
 var sections = [
-    {
-        name: 'Forside',
-        articles:[
-            {title: 'Windows', image:'http://www.fastforwardblog.com/wp-content/uploads/2011/01/BillGates-239x300.jpg'},
-            {title: 'Office', image:'http://www.fastforwardblog.com/wp-content/uploads/2011/01/BillGates-239x300.jpg'},
-            {title: 'SQL Server', image:'http://www.fastforwardblog.com/wp-content/uploads/2011/01/BillGates-239x300.jpg'}
-        ]
-    },
-    {
-        name: 'Sport',
-        articles:[
-            {title: 'Mac', image:'http://www.biography.com/imported/images/Biography/Images/Galleries/Steve%20Jobs/steve-jobs-photo-thumb.jpg'},
-            {title: 'iPod', image:'http://www.biography.com/imported/images/Biography/Images/Galleries/Steve%20Jobs/steve-jobs-photo-thumb.jpg'},
-            {title: 'iPhone', image:'http://www.biography.com/imported/images/Biography/Images/Galleries/Steve%20Jobs/steve-jobs-photo-thumb.jpg'},
-            {title: 'iPad', image:'http://www.biography.com/imported/images/Biography/Images/Galleries/Steve%20Jobs/steve-jobs-photo-thumb.jpg'}
-        ]
-    },
-    {
-        name: 'Osloby',
-        articles:[
-            {title: 'Oracle', image:'http://www.zpub.com/un/larryhotdog.jpg'}
-        ]
-    }
+//    {
+//        name: 'Forside',
+//        articles:[
+//            {title: 'Windows', image:'http://www.fastforwardblog.com/wp-content/uploads/2011/01/BillGates-239x300.jpg'},
+//            {title: 'Office', image:'http://www.fastforwardblog.com/wp-content/uploads/2011/01/BillGates-239x300.jpg'},
+//            {title: 'SQL Server', image:'http://www.fastforwardblog.com/wp-content/uploads/2011/01/BillGates-239x300.jpg'}
+//        ]
+//    },
+//    {
+//        name: 'Sport',
+//        articles:[
+//            {title: 'Mac', image:'http://www.biography.com/imported/images/Biography/Images/Galleries/Steve%20Jobs/steve-jobs-photo-thumb.jpg'},
+//            {title: 'iPod', image:'http://www.biography.com/imported/images/Biography/Images/Galleries/Steve%20Jobs/steve-jobs-photo-thumb.jpg'},
+//            {title: 'iPhone', image:'http://www.biography.com/imported/images/Biography/Images/Galleries/Steve%20Jobs/steve-jobs-photo-thumb.jpg'},
+//            {title: 'iPad', image:'http://www.biography.com/imported/images/Biography/Images/Galleries/Steve%20Jobs/steve-jobs-photo-thumb.jpg'}
+//        ]
+//    },
+//    {
+//        name: 'Osloby',
+//        articles:[
+//            {title: 'Oracle', image:'http://www.zpub.com/un/larryhotdog.jpg'}
+//        ]
+//    }
 ];
 
 // feed data to model
@@ -77,35 +77,35 @@ function modelToDom(sections) {
     slides.appendTo('.reveal');
 }
 
-//var footballPromise = $.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/222/auto').done(function(data) {
-//    sections.push(createSection('Football', data));
+//var section12Promise = $.get('http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/12/auto').done(function(data) {
+//    sections.push(createSection('Section 12', data));
 //});
 //
-//var snowboardPromise =  $.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/229/auto').done(function(data) {
-//    sections.push(createSection('Snowboard', data));
+//var section13Promise =  $.get('http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/13/auto').done(function(data) {
+//    sections.push(createSection('Section 13', data));
 //});
 //
-//var promises = [footballPromise, snowboardPromise];
+//var promises = [section12Promise, section13Promise];
 //
 //$.when.apply($, promises).done(function() {
 //    modelToDom(sections);
 //});
 
-$.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/222/auto').done(function(data) {
-    sections.push(createSection('Football', data));
-    $.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/229/auto').done(function(data) {
-        sections.push(createSection('Handball', data));
+$.get('http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/12/auto').done(function(data) {
+    sections.push(createSection('Section 12', data));
+    $.get('http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/13/auto').done(function(data) {
+        sections.push(createSection('Section 13', data));
         modelToDom(sections);
     });
 });
 
 //$.when($.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/229/auto'),
 //       $.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/222/auto'))
-// .done(function(result1, result2) {
+//.done(function(result1, result2) {
 //        sections.push(createSection('Football', result1));
 //        sections.push(createSection('Snowboard', result2));
 //        modelToDom(sections);
-// });
+//});
 
 
 
