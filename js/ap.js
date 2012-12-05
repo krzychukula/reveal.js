@@ -77,13 +77,35 @@ function modelToDom(sections) {
     slides.appendTo('.reveal');
 }
 
-$.when($.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/222/auto'),
-       $.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/222/auto'))
- .done(function(result1, result2) {
-        sections.push(createSection('Football', result1));
-        sections.push(createSection('Snowboard', result2));
+//var footballPromise = $.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/222/auto').done(function(data) {
+//    sections.push(createSection('Football', data));
+//});
+//
+//var snowboardPromise =  $.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/229/auto').done(function(data) {
+//    sections.push(createSection('Snowboard', data));
+//});
+//
+//var promises = [footballPromise, snowboardPromise];
+//
+//$.when.apply($, promises).done(function() {
+//    modelToDom(sections);
+//});
+
+$.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/222/auto').done(function(data) {
+    sections.push(createSection('Football', data));
+    $.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/229/auto').done(function(data) {
+        sections.push(createSection('Handball', data));
         modelToDom(sections);
- });
+    });
+});
+
+//$.when($.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/229/auto'),
+//       $.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/222/auto'))
+// .done(function(result1, result2) {
+//        sections.push(createSection('Football', result1));
+//        sections.push(createSection('Snowboard', result2));
+//        modelToDom(sections);
+// });
 
 
 
