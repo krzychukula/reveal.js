@@ -34,25 +34,27 @@ var sections = [
     }
 ];
 
-$.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/228/auto', function(data) {
-    // map xml from data feed to local json model (can skip this step later and read straight from the feed)
+// feed data to model
+function createSection(name, data) {
     var xml = $(data);
     var entries = xml.find('entry');
 
     var section = {};
-    section.name = 'Golf';
+    section.name = name;
     section.articles = [];
     entries.each(function(index, entry) {
         var article = {};
         console.log(entry);
         article.title = $(entry).find('title').text();
-        article.image = $(entry).find('link[rel="teaserreal"]').attr("href").replace("{cropversion}", "w180c43");
+        if($(entry).find('link[rel="teaserreal"]').attr("href")) {
+            article.image = $(entry).find('link[rel="teaserreal"]').attr("href").replace("{cropversion}", "w180c43");
+        }
         section.articles.push(article);
     });
-    sections.push(section);
+    return section;
+}
 
-
-    // Glue. Model -> DOM
+function modelToDom(sections) {
     var slides = $('.slides').detach();
     var articleTemplate = $('.article.template').detach();
     var sectionTemplate = $('.section.template').detach();
@@ -64,13 +66,25 @@ $.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section
         section.articles.forEach(function(article) {
             var articleView = articleTemplate.clonifyTemplate(sectionView);
             articleView.find('.title').text(article.title);
-            articleView.find('.image').attr({src: article.image});
+            if(article.image) {
+                articleView.find('.image').attr({src: article.image});
+            } else {
+                articleView.find('.image').remove();
+            }
         });
     });
 
     slides.appendTo('.reveal');
+}
 
-});
+$.when($.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/222/auto'),
+       $.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/222/auto'))
+ .done(function(result1, result2) {
+        sections.push(createSection('Football', result1));
+        sections.push(createSection('Snowboard', result2));
+        modelToDom(sections);
+ });
+
 
 
 
