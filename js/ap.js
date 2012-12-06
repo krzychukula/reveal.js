@@ -10,7 +10,9 @@ jQuery.fn.clonifyTemplate = function(selector) {
 
 var feeds = [
     { name: 'Economy', url: 'http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/12/auto'},
-    { name: 'Innenriks', url: 'http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/42/auto'}
+    { name: 'Innenriks', url: 'http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/42/auto'},
+    { name: 'Sport', url: 'http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/210/auto'},
+    { name: 'Nyheter Oslo', url: 'http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/41/auto'}
 ]
 
 // model
@@ -54,9 +56,9 @@ function createSectionModel(name, data) {
         article.title = $(entry).find('title').text();
         if($(entry).find('link[rel="teaserreal"]').attr("href")) {
             article.image = $(entry).find('link[rel="teaserreal"]').attr("href").replace("{cropversion}", "w180c43");
+            article.url = $(entry).find("id").text();
+            section.articles.push(article);
         }
-        article.url = $(entry).find("id").text();
-        section.articles.push(article);
     });
     return section;
 }
@@ -112,6 +114,11 @@ function contentLoaded() {
     $('.loadingIndicator').hide();
 }
 
+function setupArticleModal() {
+    $("section").attr("href", "#articlePreview");
+    $("section").leanModal();
+}
+
 function initializeReveal() {
     Reveal.initialize({
         controls: true,
@@ -149,15 +156,21 @@ function initializeReveal() {
 //    modelToDom(sections);
 //});
 
+// replace those callback of doom soon!!!
 $.get(feeds[0].url).done(function(data) {
     sections.push(createSectionModel(feeds[0].name, data));
     $.get(feeds[1].url).done(function(data) {
         sections.push(createSectionModel(feeds[1].name, data));
-        sectionsModelToDom(sections);
-        contentLoaded();
-        initializeReveal();
-        $("section").attr("href", "#articlePreview");
-        $("section").leanModal();
+        $.get(feeds[2].url).done(function(data) {
+            sections.push(createSectionModel(feeds[2].name, data));
+            $.get(feeds[3].url).done(function(data) {
+                sections.push(createSectionModel(feeds[3].name, data));
+                sectionsModelToDom(sections);
+                contentLoaded();
+                initializeReveal();
+                setupArticleModal();
+            });
+        });
     });
 });
 
