@@ -7,6 +7,12 @@ jQuery.fn.clonifyTemplate = function(selector) {
         .appendTo(selector);
 };
 
+
+var feeds = [
+    { name: 'Economy', url: 'http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/12/auto'},
+    { name: 'Section 13', url: 'http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/13/auto'}
+]
+
 // model
 var sections = [
 //    {
@@ -77,6 +83,10 @@ function modelToDom(sections) {
     slides.appendTo('.reveal');
 }
 
+function contentLoaded() {
+    $('.loadingIndicator').hide();
+}
+
 //var section12Promise = $.get('http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/12/auto').done(function(data) {
 //    sections.push(createSection('Section 12', data));
 //});
@@ -91,15 +101,12 @@ function modelToDom(sections) {
 //    modelToDom(sections);
 //});
 
-var start = new Date();
-alert("Started loading data from API");
-$.get('http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/12/auto').done(function(data) {
-    sections.push(createSection('Section 12', data));
-    $.get('http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/13/auto').done(function(data) {
-        var end = new Date();
-        alert("API data loaded in " + (end - start) + " ms");
-        sections.push(createSection('Section 13', data));
+$.get(feeds[0].url).done(function(data) {
+    sections.push(createSection(feeds[0].name, data));
+    $.get(feeds[1].url).done(function(data) {
+        sections.push(createSection(feeds[1].name, data));
         modelToDom(sections);
+        contentLoaded();
     });
 });
 
