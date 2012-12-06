@@ -10,7 +10,7 @@ jQuery.fn.clonifyTemplate = function(selector) {
 
 var feeds = [
     { name: 'Economy', url: 'http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/12/auto'},
-    { name: 'Section 13', url: 'http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/13/auto'}
+    { name: 'Innenriks', url: 'http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/42/auto'}
 ]
 
 // model
@@ -88,8 +88,6 @@ function contentLoaded() {
 }
 
 function initializeReveal() {
-    // Full list of configuration options available here:
-    // https://github.com/hakimel/reveal.js#configuration
     Reveal.initialize({
         controls: true,
         progress: true,
