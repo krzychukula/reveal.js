@@ -41,7 +41,7 @@ var sections = [
 ];
 
 // section feed data to model
-function createSection(name, data) {
+function createSectionModel(name, data) {
     var xml = $(data);
     var entries = xml.find('entry');
 
@@ -66,7 +66,7 @@ function createArticleModel(data) {
     var xml = $(data);
     var title = xml.find('title').text();
     var leadtext = xml.find("vdf\\:payload vdf\\:field[name='LEADTEXT'] vdf\\:value").text();
-    var bodytext = xml.find("vdf\\:payload vdf\\:field[name='BODYTEXT'] vdf\\:value").text();
+    var bodytext = xml.find("vdf\\:payload vdf\\:field[name='BODYTEXT'] vdf\\:value div").html();
     return {'title': title, 'leadtext': leadtext, 'bodytext': bodytext};
 }
 
@@ -75,7 +75,7 @@ function articleModelToDom(article) {
     var articleView = articleTemplate.clonifyTemplate("#articlePreview");
     articleView.find(".title").text(article.title);
     articleView.find(".leadtext").text(article.leadtext);
-    articleView.find(".bodytext").text(article.bodytext);
+    articleView.find(".bodytext").html(article.bodytext);
 }
 
 function sectionsModelToDom(sections) {
@@ -150,9 +150,9 @@ function initializeReveal() {
 //});
 
 $.get(feeds[0].url).done(function(data) {
-    sections.push(createSection(feeds[0].name, data));
+    sections.push(createSectionModel(feeds[0].name, data));
     $.get(feeds[1].url).done(function(data) {
-        sections.push(createSection(feeds[1].name, data));
+        sections.push(createSectionModel(feeds[1].name, data));
         sectionsModelToDom(sections);
         contentLoaded();
         initializeReveal();
