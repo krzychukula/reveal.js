@@ -91,9 +91,13 @@ function modelToDom(sections) {
 //    modelToDom(sections);
 //});
 
+var start = new Date();
+alert("Started loading data from API");
 $.get('http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/12/auto').done(function(data) {
     sections.push(createSection('Section 12', data));
     $.get('http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/13/auto').done(function(data) {
+        var end = new Date();
+        alert("API data loaded in " + (end - start) + " ms");
         sections.push(createSection('Section 13', data));
         modelToDom(sections);
     });
