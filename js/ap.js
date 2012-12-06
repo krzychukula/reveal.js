@@ -116,7 +116,7 @@ function contentLoaded() {
 
 function setupArticleModal() {
     $("section").attr("href", "#articlePreview");
-    $("section").leanModal();
+    $("section").leanModal({top: 10});
 }
 
 function initializeReveal() {
@@ -181,9 +181,3 @@ $.get(feeds[0].url).done(function(data) {
 //        sections.push(createSection('Snowboard', result2));
 //        modelToDom(sections);
 //});
-
-
-
-
-
-
