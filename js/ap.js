@@ -116,7 +116,7 @@ function contentLoaded() {
 
 function setupArticleModal() {
     $("section").attr("href", "#articlePreview");
-    $("section").leanModal({top: 10});
+    $("section").leanModal({top: 10, closeButton: ".modal_close"});
 }
 
 function initializeReveal() {
