@@ -38,6 +38,8 @@
 
             <div class="loadingIndicator"><img src="css/loading.gif"/> <span>Loading...</span></div>
 
+            <div id="articlePreview">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum libero purus, convallis nec vestibulum eget, luctus vitae purus. Vestibulum non mauris et sem vulputate pellentesque ac a turpis. Ut vel lacus vitae justo vestibulum lobortis. Nunc ipsum ipsum, laoreet id dictum nec, fermentum vel purus. Maecenas nisl felis, faucibus non rutrum eu, sollicitudin sed ante</div>
+
             <!-- Section template -->
             <section class="section template">
                 <section>
@@ -51,10 +53,17 @@
                 <!-- Article template goes here -->
             </section>
 
-            <!-- Article template -->
-            <section class="article template">
+            <!-- Article teaser template -->
+            <section class="articleTeaser template">
                 <h3 class="title">Article Title</h3>
                 <img class="image" src="" height="400"/>
+            </section>
+
+            <!-- Article template -->
+            <section class="article template">
+                <h2 class="title"></h2>
+                <h3 class="leadtext"></h3>
+                <div class="bodytext"></div>
             </section>
 
 			<!-- Any section element inside of this container is displayed as a slide -->
@@ -72,6 +81,7 @@
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.min.js"></script>
 		<script src="js/jquery.js"></script>
+        <script src="js/leanModal.js"></script>
 		<script src="js/ap.js"></script>
 	</body>
 </html>

@@ -40,7 +40,7 @@ var sections = [
 //    }
 ];
 
-// feed data to model
+// section feed data to model
 function createSection(name, data) {
     var xml = $(data);
     var entries = xml.find('entry');
@@ -55,14 +55,32 @@ function createSection(name, data) {
         if($(entry).find('link[rel="teaserreal"]').attr("href")) {
             article.image = $(entry).find('link[rel="teaserreal"]').attr("href").replace("{cropversion}", "w180c43");
         }
+        article.url = $(entry).find("id").text();
         section.articles.push(article);
     });
     return section;
 }
 
-function modelToDom(sections) {
+// article feed data to model
+function createArticleModel(data) {
+    var xml = $(data);
+    var title = xml.find('title').text();
+    var leadtext = xml.find("vdf\\:payload vdf\\:field[name='LEADTEXT'] vdf\\:value").text();
+    var bodytext = xml.find("vdf\\:payload vdf\\:field[name='BODYTEXT'] vdf\\:value").text();
+    return {'title': title, 'leadtext': leadtext, 'bodytext': bodytext};
+}
+
+function articleModelToDom(article) {
+    var articleTemplate = $('.article.template');
+    var articleView = articleTemplate.clonifyTemplate("#articlePreview");
+    articleView.find(".title").text(article.title);
+    articleView.find(".leadtext").text(article.leadtext);
+    articleView.find(".bodytext").text(article.bodytext);
+}
+
+function sectionsModelToDom(sections) {
     var slides = $('.slides').detach();
-    var articleTemplate = $('.article.template').detach();
+    var articleTeaserTemplate = $('.articleTeaser.template').detach();
     var sectionTemplate = $('.section.template').detach();
 
     sections.forEach(function(section) {
@@ -70,13 +88,20 @@ function modelToDom(sections) {
         sectionView.find('.sectionName').text(section.name);
 
         section.articles.forEach(function(article) {
-            var articleView = articleTemplate.clonifyTemplate(sectionView);
-            articleView.find('.title').text(article.title);
+            var articleTeaserView = articleTeaserTemplate.clonifyTemplate(sectionView);
+            articleTeaserView.find('.title').text(article.title);
             if(article.image) {
-                articleView.find('.image').attr({src: article.image});
+                articleTeaserView.find('.image').attr({src: article.image});
             } else {
-                articleView.find('.image').remove();
+                articleTeaserView.find('.image').remove();
             }
+            articleTeaserView.click(function() {
+                $("#articlePreview").text("Loading...");
+                $.get(article.url).done(function(data) {
+                    $("#articlePreview").text("");
+                    articleModelToDom(createArticleModel(data));
+                });
+            });
         });
     });
 
@@ -128,9 +153,11 @@ $.get(feeds[0].url).done(function(data) {
     sections.push(createSection(feeds[0].name, data));
     $.get(feeds[1].url).done(function(data) {
         sections.push(createSection(feeds[1].name, data));
-        modelToDom(sections);
+        sectionsModelToDom(sections);
         contentLoaded();
         initializeReveal();
+        $("section").attr("href", "#articlePreview");
+        $("section").leanModal();
     });
 });
 
