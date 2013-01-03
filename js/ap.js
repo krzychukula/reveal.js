@@ -1,3 +1,9 @@
+// YOU CAN ADD EXTRA FEEDS HERE
+var feeds = [
+    { name: 'Sport', url: 'http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/210/auto'},
+    { name: 'Football', url: 'http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/222/auto'}
+]
+
 // templating
 jQuery.fn.clonifyTemplate = function(selector) {
     return this
@@ -7,22 +13,41 @@ jQuery.fn.clonifyTemplate = function(selector) {
         .appendTo(selector);
 };
 
+function contentLoaded() {
+    $('.loadingIndicator').hide();
+}
 
-var feeds = [
-    { name: 'Economy', url: 'http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/12/auto'},
-    { name: 'Innenriks', url: 'http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/42/auto'},
-    { name: 'Sport', url: 'http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/210/auto'},
-    { name: 'Nyheter Oslo', url: 'http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/41/auto'}
-]
+function initializeReveal() {
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+    });
+}
 
 // model
 var sections = [
 //    {
 //        name: 'Forside',
 //        articles:[
-//            {title: 'Windows', image:'http://www.fastforwardblog.com/wp-content/uploads/2011/01/BillGates-239x300.jpg'},
-//            {title: 'Office', image:'http://www.fastforwardblog.com/wp-content/uploads/2011/01/BillGates-239x300.jpg'},
-//            {title: 'SQL Server', image:'http://www.fastforwardblog.com/wp-content/uploads/2011/01/BillGates-239x300.jpg'}
+//            {title: 'Windows', image:'http://www.zpub.com/un/larryhotdog.jpg'},
+//            {title: 'Office', image:'http://www.zpub.com/un/larryhotdog.jpg'},
+//            {title: 'SQL Server', image:'http://www.zpub.com/un/larryhotdog.jpg'}
 //        ]
 //    },
 //    {
@@ -54,8 +79,8 @@ function createSectionModel(name, data) {
         var article = {};
         console.log(entry);
         article.title = $(entry).find('title').text();
-        if($(entry).find('link[rel="teaserreal"]').attr("href")) {
-            article.image = $(entry).find('link[rel="teaserreal"]').attr("href").replace("{cropversion}", "w180c43");
+        if($(entry).find('link[rel="TEASERREL"]').attr("href")) {
+            article.image = $(entry).find('link[rel="TEASERREL"]').attr("href").replace("{snd:cropversion}", "w180c43").replace("{snd:mode}", "ALTERNATES");
             article.url = $(entry).find("id").text();
             section.articles.push(article);
         }
@@ -67,8 +92,8 @@ function createSectionModel(name, data) {
 function createArticleModel(data) {
     var xml = $(data);
     var title = xml.find('title').text();
-    var leadtext = xml.find("vdf\\:payload vdf\\:field[name='LEADTEXT'] vdf\\:value").text();
-    var bodytext = xml.find("vdf\\:payload vdf\\:field[name='BODYTEXT'] vdf\\:value div").html();
+    var leadtext = xml.find("vdf\\:payload vdf\\:field[name='leadtext'] vdf\\:value").text();
+    var bodytext = xml.find("vdf\\:payload vdf\\:field[name='bodytext'] vdf\\:value div").html();
     return {'title': title, 'leadtext': leadtext, 'bodytext': bodytext};
 }
 
@@ -110,74 +135,22 @@ function sectionsModelToDom(sections) {
     slides.appendTo('.reveal');
 }
 
-function contentLoaded() {
-    $('.loadingIndicator').hide();
-}
-
 function setupArticleModal() {
     $("section").attr("href", "#articlePreview");
     $("section").leanModal({top: 10, closeButton: ".modal_close"});
+    $("#articlePreview").focus();
 }
 
-function initializeReveal() {
-    Reveal.initialize({
-        controls: true,
-        progress: true,
-        history: true,
-        center: true,
-
-        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
-
-        // Optional libraries used to extend on reveal.js
-        dependencies: [
-            { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-            { src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-            { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-            { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-            { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
-            // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
-        ]
+var promises = feeds.map(function(feed) {
+    return $.get(feed.url).done(function(data) {
+        sections.push(createSectionModel(feed.name, data));
     });
-}
 
-//var section12Promise = $.get('http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/12/auto').done(function(data) {
-//    sections.push(createSection('Section 12', data));
-//});
-//
-//var section13Promise =  $.get('http://apitestbeta3.medianorge.no/news/publication/ap/escenic/section/13/auto').done(function(data) {
-//    sections.push(createSection('Section 13', data));
-//});
-//
-//var promises = [section12Promise, section13Promise];
-//
-//$.when.apply($, promises).done(function() {
-//    modelToDom(sections);
-//});
-
-// replace those callback of doom soon!!!
-$.get(feeds[0].url).done(function(data) {
-    sections.push(createSectionModel(feeds[0].name, data));
-    $.get(feeds[1].url).done(function(data) {
-        sections.push(createSectionModel(feeds[1].name, data));
-        $.get(feeds[2].url).done(function(data) {
-            sections.push(createSectionModel(feeds[2].name, data));
-            $.get(feeds[3].url).done(function(data) {
-                sections.push(createSectionModel(feeds[3].name, data));
-                sectionsModelToDom(sections);
-                contentLoaded();
-                initializeReveal();
-                setupArticleModal();
-            });
-        });
-    });
 });
 
-//$.when($.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/229/auto'),
-//       $.get('http://apitestbeta3.medianorge.no/news/publication/common/escenic/section/222/auto'))
-//.done(function(result1, result2) {
-//        sections.push(createSection('Football', result1));
-//        sections.push(createSection('Snowboard', result2));
-//        modelToDom(sections);
-//});
+$.when.apply($, promises).done(function() {
+    sectionsModelToDom(sections);
+    contentLoaded();
+    initializeReveal();
+    setupArticleModal();
+});
